@@ -12,11 +12,11 @@
  * @copyright 2013 ThemeAvenue
  *
  * Plugin Name:       Remote Dashboard Notifications
- * Plugin URI:        https://github.com/ThemeAvenue/Remote-Dashboard-Notifications
+ * Plugin URI:        https://github.com/Niloys7/Remote-Dashboard-Notifications
  * Description:       Remote Dashboard Notifications is made for themes and plugins developers who want to send short notifications to their users.
  * Version:           1.3.0
- * Author:            ThemeAvenue
- * Author URI:        http://themeavenue.net
+ * Author:            Niloy
+ * Author URI:        https://github.com/Niloys7
  * Text Domain:       remote-notifications
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -24,7 +24,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if ( !defined( 'WPINC' ) ) {
 	die;
 }
 
@@ -35,7 +35,10 @@ define( 'RDN_PATH', plugin_dir_path( __FILE__ ) );
  * Public-Facing Functionality
  *----------------------------------------------------------------------------*/
 
-require_once( plugin_dir_path( __FILE__ ) . 'includes/class-rdn.php' );
+require_once RDN_PATH . 'includes/codestar/codestar-framework.php';
+
+require_once RDN_PATH . 'includes/csf-notification.php';
+require_once RDN_PATH . 'includes/class-rdn.php';
 
 /*
  * Register hooks that are fired when the plugin is activated or deactivated.
@@ -58,18 +61,8 @@ add_action( 'plugins_loaded', array( 'Remote_Notifications', 'get_instance' ) );
  */
 if ( is_admin() ) {
 
-	require_once( RDN_PATH . 'includes/class-rdn-admin.php' );
+	require_once RDN_PATH . 'includes/class-rdn-admin.php';
+
 	add_action( 'plugins_loaded', array( 'Remote_Notifications_Admin', 'get_instance' ) );
-
-	/**
-	 * Instantiate the client class
-	 */
-	if ( ! class_exists( 'TAV_Remote_Notification_Client' ) ) {
-		require_once( RDN_PATH . 'includes/class-remote-notification-client.php' );
-	}
-
-	if( function_exists( 'rdnc_add_notification' ) ) {
-		rdnc_add_notification( 4, '0a075eda8c3be0ed', 'https://api.themeavenue.net' );
-	}
 
 }

@@ -109,7 +109,7 @@ class Remote_Notifications {
 
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 
-			if ( $network_wide  ) {
+			if ( $network_wide ) {
 
 				// Get all blog ids
 				$blog_ids = self::get_blog_ids();
@@ -241,7 +241,7 @@ class Remote_Notifications {
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
 		load_textdomain( $domain, RDN_PATH . 'languages/' . $domain . '-' . $locale . '.mo' );
-		
+
 	}
 
 	/**
@@ -271,13 +271,13 @@ class Remote_Notifications {
 
 		global $wp_query;
 
-		if( is_archive() && isset( $wp_query->query_vars['post_type'] ) && 'notification' == $wp_query->query_vars['post_type'] ) {
+		if ( is_archive() && isset( $wp_query->query_vars['post_type'] ) && 'notification' == $wp_query->query_vars['post_type'] ) {
 
 			$single = RDN_PATH . '/includes/archive-notification.php';
 
-			if( file_exists( $single ) ) {
+			if ( file_exists( $single ) ) {
 
-				include( $single );
+				include $single;
 				exit;
 
 			}
@@ -295,20 +295,20 @@ class Remote_Notifications {
 
 		/* Set the default labels */
 		$labels = array(
-			'name'                  => _x( 'Notification', 'post type general name', 'remote-notifications' ),  
-			'singular_name'         => _x( 'Notification', 'post type singular name', 'remote-notifications' ),  
-			'add_new'               => __( 'Add New', 'remote-notifications' ),  
-			'add_new_item'          => __( 'Add New Notification', 'remote-notifications' ),  
-			'edit_item'             => __( 'Edit Notification', 'remote-notifications' ),  
-			'new_item'              => __( 'New Notification', 'remote-notifications' ),  
-			'all_items'             => __( 'All Notifications', 'remote-notifications' ),  
-			'view_item'             => __( 'View Notification', 'remote-notifications' ),  
-			'search_items'          => __( 'Search Notifications', 'remote-notifications' ),  
-			'not_found'             => __( 'No Notification found', 'remote-notifications' ),  
-			'not_found_in_trash'    => __( 'No Notification found in Trash', 'remote-notifications' ),   
-			'parent_item_colon'     => '',
-			'menu_icon' 			=> 'dashicons-format-chat',
-			'menu_name'             => __( 'Notifications', 'remote-notifications' )
+			'name'               => _x( 'Notification', 'post type general name', 'remote-notifications' ),
+			'singular_name'      => _x( 'Notification', 'post type singular name', 'remote-notifications' ),
+			'add_new'            => __( 'Add New', 'remote-notifications' ),
+			'add_new_item'       => __( 'Add New Notification', 'remote-notifications' ),
+			'edit_item'          => __( 'Edit Notification', 'remote-notifications' ),
+			'new_item'           => __( 'New Notification', 'remote-notifications' ),
+			'all_items'          => __( 'All Notifications', 'remote-notifications' ),
+			'view_item'          => __( 'View Notification', 'remote-notifications' ),
+			'search_items'       => __( 'Search Notifications', 'remote-notifications' ),
+			'not_found'          => __( 'No Notification found', 'remote-notifications' ),
+			'not_found_in_trash' => __( 'No Notification found in Trash', 'remote-notifications' ),
+			'parent_item_colon'  => '',
+			'menu_icon'          => 'dashicons-format-chat',
+			'menu_name'          => __( 'Notifications', 'remote-notifications' ),
 		);
 
 		/* Post type settings */
@@ -323,7 +323,7 @@ class Remote_Notifications {
 			'has_archive'        => true,
 			'hierarchical'       => false,
 			'menu_position'      => null,
-			'supports'           => array( 'title', 'editor' )
+			'supports'           => array( 'title', 'editor', 'custom-fields' ),
 		);
 
 		register_post_type( 'notification', $args );
@@ -359,11 +359,11 @@ class Remote_Notifications {
 				// translators: Publish box date format, see http://php.net/date
 				date_i18n( __( 'M j, Y @ G:i', 'remote-notifications' ), strtotime( $post->post_date ) )
 			),
-			10 => __( 'Notification draft updated.', 'remote-notifications' )
+			10 => __( 'Notification draft updated.', 'remote-notifications' ),
 		);
 
 		return $messages;
-		
+
 	}
 
 	/**

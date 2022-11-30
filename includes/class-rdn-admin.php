@@ -58,8 +58,7 @@ class Remote_Notifications_Admin {
 		$this->plugin_slug = $plugin->get_plugin_slug();
 
 		add_action( 'rn-channel_edit_form_fields', array( $this, 'show_channel_key' ), 10, 2 );
-		add_action( 'add_meta_boxes', array( $this, 'metabox' ) );
-		add_action( 'save_post', array( $this, 'save_settings' ) );
+		
 		add_filter( 'manage_notification_posts_columns', array( $this, 'start_end_dates_columns' ), 10, 1 );
 		add_action( 'manage_notification_posts_custom_column' , array( $this, 'start_end_dates_columns_content' ), 10, 2 );
 
@@ -158,112 +157,9 @@ class Remote_Notifications_Admin {
 
     <?php }
 
-	/**
-	* Adds a metabox to the side column on the notification screen.
-	*/
-	public function metabox() {
-
-		add_meta_box( 'rn_settings', __( 'Settings', 'remote-notifications' ), array( $this, 'notice_settings' ), 'notification', 'side' );
-
-	}
-
-	/**
-	* Prints the metabox content.
-	* 
-	* @param WP_Post $post The object for the current post/page.
-	*/
-	public function notice_settings( $post ) {
-
-		wp_nonce_field( 'update_settings', 'rn_settings_nonce', false );
-
-		/*
-		* Use get_post_meta() to retrieve an existing value
-		* from the database and use the value for the form.
-		*/
-		$value = get_post_meta( $post->ID, '_rn_settings', true );
-		$style = isset( $value['style'] ) ? esc_attr( $value['style'] ) : '';
-		?>
-
-		<label for="rn_style" class="screen-reader-text"><?php _e( 'Notice Style', 'remote-notifications' ); ?></label>
-		<p><strong><?php _e( 'Notice Style', 'remote-notification' ); ?></strong></p>
-		<select id="rn_style" name="rn_settings[style]">
-			<optgroup label="<?php _e( 'WordPress Style', 'remote-notifications' ); ?>">
-				<option value="updated" <?php if( 'updated' == $style ): ?>selected="selected"<?php endif; ?>><?php _e( 'Updated', 'remote-notifications' ); ?></option>
-				<option value="error" <?php if( 'error' == $style ): ?>selected="selected"<?php endif; ?>><?php _e( 'Error', 'remote-notifications' ); ?></option>
-			</optgroup>
-			<optgroup label="<?php _e( 'Custom Style', 'remote-notifications' ); ?>">
-				<option value="success" <?php if( 'success' == $style ): ?>selected="selected"<?php endif; ?>><?php _e( 'Success', 'remote-notifications' ); ?></option>
-				<option value="info" <?php if( 'info' == $style ): ?>selected="selected"<?php endif; ?>><?php _e( 'Info', 'remote-notifications' ); ?></option>
-				<option value="warning" <?php if( 'warning' == $style ): ?>selected="selected"<?php endif; ?>><?php _e( 'Warning', 'remote-notifications' ); ?></option>
-				<option value="danger" <?php if( 'danger' == $style ): ?>selected="selected"<?php endif; ?>><?php _e( 'Danger', 'remote-notifications' ); ?></option>
-			</optgroup>
-		</select>
-
-		<p><label for="rn_date_start"><strong><?php _e( 'Start Date', 'remote-notifications' ); ?></strong></label></p>
-		<input type="date" id="rn_date_start" name="rn_settings[date_start]" value="<?php echo isset( $value['date_start'] ) ? esc_attr( $value['date_start'] ) : ''; ?>">
-		<p class="description"><?php _e( 'Leave empty for no start date (will start immediately)', 'remote-notifications' ); ?></p>
+	
 
 
-		<p><label for="rn_date_end"><strong><?php _e( 'End Date', 'remote-notifications' ); ?></strong></label></p>
-		<input type="date" id="rn_date_end" name="rn_settings[date_end]" value="<?php echo isset( $value['date_end'] ) ? esc_attr( $value['date_end'] ) : ''; ?>">
-		<p class="description"><?php _e( 'Leave empty for no end date (will never end)', 'remote-notifications' ); ?></p>
-
-	<?php }
-
-	/**
-	 * When the post is saved, saves our custom data.
-	 *
-	 * @param int $post_id The ID of the post being saved.
-	 *
-	 * @return int|bool Meta ID or false on failure
-	 */
-	public function save_settings( $post_id ) {
-
-		/*
-		* We need to verify this came from the our screen and with proper authorization,
-		* because save_post can be triggered at other times.
-		*/
-
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['rn_settings_nonce'] ) ) {
-			return $post_id;
-		}
-
-		$nonce = $_POST['rn_settings_nonce'];
-
-		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $nonce, 'update_settings' ) ) {
-			return $post_id;
-		}
-
-		// If this is an autosave, our form has not been submitted, so we don't want to do anything.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return $post_id;
-		}
-
-		// Check the user's permissions.
-		if ( 'notification' == $_POST['post_type'] ) {
-
-			if ( ! current_user_can( 'edit_page', $post_id ) ) {
-				return $post_id;
-			}
-
-		} else {
-
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				return $post_id;
-			}
-		}
-
-		/* OK, its safe for us to save the data now. */
-
-		// Sanitize user input.
-		$mydata = array_map( 'sanitize_text_field', $_POST['rn_settings'] );
-
-		// Update the meta field in the database.
-		return update_post_meta( $post_id, '_rn_settings', $mydata );
-
-	}
 
 	/**
 	 * Add start and end dates columns

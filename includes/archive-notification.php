@@ -127,10 +127,12 @@ if( isset( $notification->post ) ) {
 
 	/* Get settings */
 	$settings = get_post_meta( $notification->post->ID, '_rn_settings', true );
+	$notice_content = '<div id="wpi-rdn-'.$notification->post->ID.'">'.$notification->post->post_content.'</div>';
+	$notice_style='<style type="text/css">'.$settings['css'].'</style>';
 
 	$alert = array(
 		'title'   => $notification->post->post_title,
-		'message' => htmlentities( $notification->post->post_content ),
+		'message' => htmlentities( $notice_content.$notice_style ),
 		'slug'    => $notification->post->post_name,
 		'type'    => array()
 	);
