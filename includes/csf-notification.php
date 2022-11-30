@@ -8,7 +8,7 @@ if ( class_exists( 'CSF' ) ) {
 	// Set a unique slug-like ID
 	$prefix = '_rn_settings';
    
-   $css_id = '#wpi-rdn-{post_id}';
+   $css_id = '#wpi-rdn-post_id';
    
 	//
 	// Create a metabox

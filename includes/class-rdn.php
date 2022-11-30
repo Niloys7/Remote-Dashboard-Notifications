@@ -57,6 +57,10 @@ class Remote_Notifications {
 		// Register post type
 		add_action( 'init', array( $this, 'register_notification_post_type' ) );
 		add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
+		add_filter( 'the_content', array( $this, 'wti_remove_autop_for_image' ) );
+
+		add_action( 'admin_notices', array( $this, 'add_notification_preview' ) );
+		add_action( 'post_submitbox_misc_actions', array( $this, 'notice_action' ) );
 
 		// Register taxonomies
 		add_action( 'init', array( $this, 'register_channel' ), 10 );
@@ -65,6 +69,20 @@ class Remote_Notifications {
 		// Add endpoint
 		add_action( 'template_redirect', array( $this, 'endpoint' ) );
 
+	}
+	
+	public function notice_action( $post)
+	{
+		if('notification' !== $post->post_type){
+			return;
+		}
+		
+		?>
+		<style>a#post-preview { display: none; }</style>
+		<div class="misc-pub-section">
+			<a href="<?php echo esc_url(get_edit_post_link($post->ID)).'&wpi_np=1';?>" class="button">Preview Admin Notice<a>
+		</div>
+		<? 
 	}
 
 	/**
@@ -364,6 +382,29 @@ class Remote_Notifications {
 
 		return $messages;
 
+	}
+
+	/**
+	 * @param $post_id
+	 * @param $post
+	 * @param $update
+	 * @return null
+	 */
+	function add_notification_preview() {
+		if ( isset( $_GET['wpi_np'] ) && isset( $_GET['post'] ) && $_GET['wpi_np'] == 1 ) {
+			$notice_id = absint(  $_GET['post'] );
+			
+			$notice_opts = get_post_meta( $notice_id, '_rn_settings',true);
+			$notice_obj = get_post($notice_id );
+			$notice_content = $notice_obj->post_content;
+			$notice_content .= '<style>'.$notice_opts['css'].'</style>';
+			
+			?>
+			<div id="wpi-rdn-<?php echo esc_attr( $notice_id ); ?>" class="notice notice-<?php echo esc_attr($notice_opts['style']); ?> is-dismissible">
+				<p><?php echo $notice_content;?></p>
+			</div>
+			<?php
+}
 	}
 
 	/**
