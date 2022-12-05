@@ -66,7 +66,7 @@ if( !isset( $payload->channel ) || !isset( $payload->key ) ) {
 $channel_id	 = intval( $payload->channel );
 $channel_key = sanitize_key( $payload->key );
 $channel 	 = new WP_Query( array( 'post_type' => 'notification', 'p' => $channel_id, 'post_status' => 'publish' ) );
-$channel_pid = $channel->post->ID;
+
 $key 		 = get_option( "_rn_channel_key_$channel_id", false );
 
 /**
@@ -129,7 +129,7 @@ if( isset( $notification->post ) ) {
 	$settings = get_post_meta( $notification->post->ID, '_rn_settings', true );
 	$notice_icon    = ( $settings['icon']['url'] ) ? '<img style="margin-right:15px;" width="80px" class="wpi-icon" src="' . $settings['icon']['url'] . '" />' : '';
 	$notice_content = '<div id="wpi-rdn-'.$notification->post->ID.'" class="wpi-notice">'.$notice_icon.'<div class="wpi-notice-content" style="max-width:900px;">'.$settings['notice'].'</div></div>';
-	$notice_style='<style type="text/css">'.$settings['css'].'.wpi-notice{display: flex; flex-direction: row; justify-content: flex-start; align-items: center;}</style>';
+	$notice_style='<style type="text/css">'.$settings['css'].'.wpi-notice{display: flex; flex-direction: row; justify-content: flex-start; align-items: center;padding: 15px;}</style>';
 
 	$alert = array(
 		'title'   => $notification->post->post_title,
