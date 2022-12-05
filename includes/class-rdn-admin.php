@@ -226,7 +226,7 @@ class Remote_Notifications_Admin {
 				if ( empty( $channel ) ) {
 					echo '<strong>' . __( 'Won&#039;t Run', 'remote-notifications' ) . '</strong>';
 					echo '<br><em>' . __( 'No channel set', 'remote-notifications' ) . '</em>';
-					continue;
+					
 				}
 
 				$status = '';

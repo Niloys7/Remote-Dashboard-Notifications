@@ -57,7 +57,6 @@ class Remote_Notifications {
 		// Register post type
 		add_action( 'init', array( $this, 'register_notification_post_type' ) );
 		add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
-		add_filter( 'the_content', array( $this, 'wti_remove_autop_for_image' ) );
 
 		add_action( 'admin_notices', array( $this, 'add_notification_preview' ) );
 		add_action( 'post_submitbox_misc_actions', array( $this, 'notice_action' ) );
