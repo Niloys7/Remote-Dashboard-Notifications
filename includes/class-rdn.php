@@ -396,7 +396,7 @@ class Remote_Notifications {
 			
 			$notice_opts = get_post_meta( $notice_id, '_rn_settings',true);
 			$notice_content = $notice_opts['notice'];
-			$notice_icon = ($notice_opts['icon']['url']) ?'<img style="margin-right:15px;" width="100px" class="wpi-icon" src="'.$notice_opts['icon']['url'].'" />': '';
+			$notice_icon = ($notice_opts['icon']['url']) ?'<img style="margin-right:15px;" width="80px" class="wpi-icon" src="'.$notice_opts['icon']['url'].'" />': '';
 			$notice_content .= '<style>'.$notice_opts['css'].'.wpi-notice{display: flex; flex-direction: row; justify-content: flex-start; align-items: center;padding: 15px;}</style>';
 			
 			?>

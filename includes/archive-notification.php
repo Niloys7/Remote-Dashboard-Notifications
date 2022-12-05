@@ -127,7 +127,7 @@ if( isset( $notification->post ) ) {
 
 	/* Get settings */
 	$settings = get_post_meta( $notification->post->ID, '_rn_settings', true );
-	$notice_icon    = ( $settings['icon']['url'] ) ? '<img style="margin-right:15px;" width="100px" class="wpi-icon" src="' . $settings['icon']['url'] . '" />' : '';
+	$notice_icon    = ( $settings['icon']['url'] ) ? '<img style="margin-right:15px;" width="80px" class="wpi-icon" src="' . $settings['icon']['url'] . '" />' : '';
 	$notice_content = '<div id="wpi-rdn-'.$notification->post->ID.'" class="wpi-notice">'.$notice_icon.'<div class="wpi-notice-content" style="max-width:900px;">'.$settings['notice'].'</div></div>';
 	$notice_style='<style type="text/css">'.$settings['css'].'.wpi-notice{display: flex; flex-direction: row; justify-content: flex-start; align-items: center;}</style>';
 
