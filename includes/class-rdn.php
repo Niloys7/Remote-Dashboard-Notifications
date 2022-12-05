@@ -325,7 +325,7 @@ class Remote_Notifications {
 			'not_found'          => __( 'No Notification found', 'remote-notifications' ),
 			'not_found_in_trash' => __( 'No Notification found in Trash', 'remote-notifications' ),
 			'parent_item_colon'  => '',
-			'menu_icon'          => 'dashicons-format-chat',
+			'menu_icon'          => 'dashicons-bell',
 			'menu_name'          => __( 'Notifications', 'remote-notifications' ),
 		);
 
@@ -341,7 +341,7 @@ class Remote_Notifications {
 			'has_archive'        => true,
 			'hierarchical'       => false,
 			'menu_position'      => null,
-			'supports'           => array( 'title', 'editor', 'custom-fields' ),
+			'supports'           => array( 'title', 'custom-fields' ),
 		);
 
 		register_post_type( 'notification', $args );
@@ -395,13 +395,14 @@ class Remote_Notifications {
 			$notice_id = absint(  $_GET['post'] );
 			
 			$notice_opts = get_post_meta( $notice_id, '_rn_settings',true);
-			$notice_obj = get_post($notice_id );
-			$notice_content = $notice_obj->post_content;
-			$notice_content .= '<style>'.$notice_opts['css'].'</style>';
+			$notice_content = $notice_opts['notice'];
+			$notice_icon = ($notice_opts['icon']['url']) ?'<img style="margin-right:15px;" width="100px" class="wpi-icon" src="'.$notice_opts['icon']['url'].'" />': '';
+			$notice_content .= '<style>'.$notice_opts['css'].'.wpi-notice{display: flex; flex-direction: row; justify-content: flex-start; align-items: center;padding: 15px;}</style>';
 			
 			?>
-			<div id="wpi-rdn-<?php echo esc_attr( $notice_id ); ?>" class="notice notice-<?php echo esc_attr($notice_opts['style']); ?> is-dismissible">
-				<p><?php echo $notice_content;?></p>
+			<div id="wpi-rdn-<?php echo esc_attr( $notice_id ); ?>" class="wpi-notice notice notice-<?php echo esc_attr($notice_opts['style']); ?> is-dismissible">
+				<?php echo $notice_icon; ?>
+				<div class="wpi-notice-content" style="max-width:900px;"><?php echo $notice_content; ?></div>
 			</div>
 			<?php
 }
