@@ -79,9 +79,9 @@ class Remote_Notifications {
 		?>
 		<style>a#post-preview { display: none; }</style>
 		<div class="misc-pub-section">
-			<a href="<?php echo esc_url(get_edit_post_link($post->ID)).'&wpi_np=1';?>" class="button">Preview Admin Notice<a>
+			<a href="<?php echo esc_url(get_edit_post_link($post->ID)).'&wpi_np=1';?>" class="button">Preview Admin Notice</a>
 		</div>
-		<? 
+		<?php
 	}
 
 	/**
@@ -404,7 +404,7 @@ class Remote_Notifications {
 				<div class="wpi-notice-content" style="max-width:900px;"><?php echo $notice_content; ?></div>
 			</div>
 			<?php
-}
+		}
 	}
 
 	/**
